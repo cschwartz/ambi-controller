@@ -1,0 +1,65 @@
+grammar AmbiConfig
+  rule document
+    (full_line_comment / empty_line / component / program)*
+  end
+
+  rule full_line_comment
+    comment "\n" #<Comment>
+  end
+
+  rule comment
+   space "#" string #<Comment>
+  end
+
+  rule empty_line
+    "\n"
+  end
+
+  rule component
+    name:name space "{\n" properties:(property / full_line_comment)* "}\n" <ComponentNode>
+  end
+
+  rule program
+    "&" name:name space "{\n" activations:activation* "}\n" <ProgramNode>
+  end
+
+  rule property
+    space property_name:name space property_value:value comment? "\n" <PropertyNode>
+  end
+
+  rule activation
+    space "activate" space "&" name:name comment? "\n" <ActivationNode>
+  end
+
+  rule name
+    name:string_without_space { def value; name.value; end }
+  end
+
+  rule value
+    value_item:(float / range / integer / string_without_space) { def value; value_item.value; end }
+  end
+
+  rule range
+    integer '-' integer { def value; text_value; end }
+  end
+
+  rule integer
+    '-'? [0-9]+ { def value; text_value.to_i; end }
+  end
+
+  rule float
+    integer '.' [0-9]+ { def value; text_value.to_f; end }
+  end
+
+  rule string_without_space
+    [a-zA-Z0-9\-/\._]+ { def value; text_value; end }
+  end
+
+  rule string
+    [a-zA-z0-9\-/\. _]* { def value; text_value; end }
+  end
+
+  rule space
+    " "*
+  end
+end
