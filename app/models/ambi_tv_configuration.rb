@@ -42,6 +42,24 @@ class AmbiTvConfiguration
     create_switch_file(program_id)
   end
 
+  def pause(do_pause)
+    filename = File.join(AmbiTvConfiguration.TRIGGER_PATH, do_pause ? "stop" : "start")
+    if Rails.env.development?
+      puts filename
+    else
+      FileUtils.touch(filename)
+    end
+  end
+
+  def shutdown(do_shutdown)
+    command = "sudo halt"
+    if Rails.env.development?
+      puts command
+    else
+      `#{ command }`
+    end
+  end
+
   def create_switch_file(program_id)
     filename = File.join(AmbiTvConfiguration.TRIGGER_PATH, "switch_mode.#{ program_id }")
     if Rails.env.development?

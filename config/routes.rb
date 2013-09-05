@@ -2,6 +2,8 @@ AmbiController::Application.routes.draw do
   resources :programs
   resources :components
   resource :current_program
+  resource :pause
+  resource :shutdown
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

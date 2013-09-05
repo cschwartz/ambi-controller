@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'passenger'
 gem 'treetop'
 gem 'polyglot'
 gem 'pry'
