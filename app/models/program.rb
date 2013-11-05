@@ -4,6 +4,7 @@ class Program
   attr_reader :id
   attr_reader :name
   attr_reader :activations
+  attr_accessor :isCurrent
 
   def initialize(id, program_name)
     @id = id

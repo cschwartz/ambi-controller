@@ -22,6 +22,10 @@ class AmbiTvConfiguration
   end
 
   def programs
+    current_program = File.open(File.join(AmbiTvConfiguration.STATUS_PATH, "current_program")).read.strip
+    @programs.each_value do |program|
+      program.isCurrent = (program.name == current_program)
+    end
     @programs.values
   end
 
@@ -75,6 +79,10 @@ class AmbiTvConfiguration
     else
       "/etc/ambi-tv.conf"
     end
+  end
+
+  def self.STATUS_PATH
+    "/var/ambi-tv/status"
   end
 
   def self.TRIGGER_PATH
