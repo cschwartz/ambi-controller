@@ -6,7 +6,7 @@ require 'faye'
 EventMachine.kqueue = true if EventMachine.kqueue?
 
 EM.run {
-  client = Faye::Client.new('http://0.0.0.0:3000/faye')
+  client = Faye::Client.new('http://192.168.2.115/faye', timeout: 3600, retry: 5)
 
   client.subscribe('/ambi-tv')
 
@@ -14,9 +14,9 @@ EM.run {
     def initialize(client)
       @client = client
     end
+
     def file_modified
       current_program = File.open(path).read.strip
-
       @client.publish('/ambi-tv', 'current_program' => current_program)
     end
   end
@@ -27,7 +27,6 @@ EM.run {
     end
 
     def file_modified
-      puts "#{path} changed"
       is_paused = File.open(path).read.strip
       @client.publish('/ambi-tv', 'is_paused' => is_paused)
     end
